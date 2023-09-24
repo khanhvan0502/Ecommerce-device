@@ -852,3 +852,8 @@ footer .input-group-text {
 }
 
 /* Shipping page section End Here*/
+
+.error {
+  color: red;
+  font-size: 12px;
+}
