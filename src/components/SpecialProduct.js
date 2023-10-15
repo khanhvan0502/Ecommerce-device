@@ -40,9 +40,9 @@ const SpecialProduct = () => {
                   className="progress-bar"
                   role="progressbar"
                   style={{ width: "25%" }}
-                  ariaValuenow="25"
-                  ariaValuemin="0"
-                  ariaValuemax="100"
+                  aria-valuenow="25"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
                 ></div>
               </div>
             </div>
