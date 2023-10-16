@@ -9,16 +9,24 @@ import { services } from "../utils/Data";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs } from "../features/blogs/blogSlice";
 import moment from "moment";
+import { getProducts } from "../features/products/productSlice";
 
 const Home = () => {
+  const productState = useSelector((state) => state?.product?.product);
+  console.log("🚀 ~ file: Home.js:16 ~ Home ~ productState:", productState);
   const blogState = useSelector((state) => state?.blog?.blog);
   const dispatch = useDispatch();
   useEffect(() => {
     getAllBlogs();
+    getAllProducts();
   }, []);
 
   const getAllBlogs = () => {
     dispatch(getBlogs());
+  };
+
+  const getAllProducts = () => {
+    dispatch(getProducts());
   };
 
   return (
@@ -265,10 +273,24 @@ const Home = () => {
           </div>
         </div>
         <div className="row">
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
+          {productState &&
+            productState?.map((item, index) => {
+              if (item.tags === "featured") {
+                {
+                  /* if (item.tags === "special") { */
+                }
+                return (
+                  <SpecialProduct
+                    key={index}
+                    title={item?.title}
+                    brand={item?.brand}
+                    totalrating
+={item?.totalrating
+}
+                  />
+                );
+              }
+            })}
         </div>
       </Container>
       <Container class1="popular-wrapper py-5 home-wrapper-2">

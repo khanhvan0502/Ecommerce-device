@@ -12,7 +12,6 @@ import { addToWishlist } from "../features/products/productSlice";
 
 const ProductCard = (props) => {
   const { grid, data } = props;
-  console.log("🚀 ~ file: ProductCard.js:15 ~ ProductCard ~ data:", data);
   let location = useLocation();
   const dispatch = useDispatch();
 
