@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import BlogCard from "../components/BlogCard";
 import ProductCard from "../components/ProductCard";
@@ -9,13 +9,20 @@ import { services } from "../utils/Data";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogs } from "../features/blogs/blogSlice";
 import moment from "moment";
-import { getProducts } from "../features/products/productSlice";
+import { addToWishlist, getProducts } from "../features/products/productSlice";
+import ReactStars from "react-rating-stars-component";
+import prodcompare from "../images/prodcompare.svg";
+import wish from "../images/wish.svg";
+import watch from "../images/watch.jpg";
+import watch2 from "../images/watch-1.avif";
+import addcart from "../images/add-cart.svg";
+import view from "../images/view.svg";
 
 const Home = () => {
   const productState = useSelector((state) => state?.product?.product);
-  console.log("🚀 ~ file: Home.js:16 ~ Home ~ productState:", productState);
   const blogState = useSelector((state) => state?.blog?.blog);
   const dispatch = useDispatch();
+  let location = useLocation();
   useEffect(() => {
     getAllBlogs();
     getAllProducts();
@@ -27,6 +34,10 @@ const Home = () => {
 
   const getAllProducts = () => {
     dispatch(getProducts());
+  };
+
+  const addToWishList = (id) => {
+    dispatch(addToWishlist(id));
   };
 
   return (
@@ -284,9 +295,10 @@ const Home = () => {
                     key={index}
                     title={item?.title}
                     brand={item?.brand}
-                    totalrating
-={item?.totalrating
-}
+                    totalRating={item?.totalrating.toString()}
+                    price={item?.price}
+                    sold={item?.sold}
+                    quantity={item?.quantity}
                   />
                 );
               }
@@ -300,10 +312,100 @@ const Home = () => {
           </div>
         </div>
         <div className="row">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {productState &&
+            productState?.map((item, index) => {
+              if (item.tags === "featured") {
+                {
+                  /* if (item.tags === "popular") { */
+                }
+                return (
+                  <div
+                    key={index}
+                    // className={` ${
+                    //   location.pathname == "/product" ? `gr-${grid}` : "col-3"
+                    // } `}
+                    className={"col-3"}
+                  >
+                    <Link
+                      to={`${
+                        location.pathname == "/"
+                          ? "/product/:id"
+                          : location.pathname == "/product/:id"
+                          ? "/product/:id"
+                          : ":id"
+                      }`}
+                      className="product-card position-relative"
+                    >
+                      <div className="wishlist-icon position-absolute">
+                        <button
+                          className="border-0 bg-transparent"
+                          onClick={(e) => {
+                            addToWishList(item?._id);
+                          }}
+                        >
+                          <img src={wish} alt="wishlist" />
+                        </button>
+                      </div>
+                      <div className="product-image">
+                        <img
+                          src={
+                            item?.images[0]?.url ? item?.images[0]?.url : watch
+                          }
+                          className="img-fluid"
+                          alt="product image"
+                        />
+                        {/* <img
+                    src={item?.images.length && item?.images[0].url}
+                    className="img-fluid mx-auto"
+                    width={160}
+                    alt="product image"
+                  /> */}
+                        <img
+                          src={
+                            item?.images[1]?.url ? item?.images[1]?.url : watch2
+                          }
+                          className="img-fluid"
+                          alt="product image"
+                        />
+                      </div>
+                      <div className="product-details">
+                        <h6 className="brand">{item?.brand}</h6>
+                        <h5 className="product-title">{item?.title}</h5>
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          value={item?.totalrating.toString()}
+                          edit={false}
+                          activeColor="#ffd700"
+                        />
+                        {/* <p
+                          className={`description ${
+                            grid === 12 ? "d-block" : "d-none"
+                          }`}
+                          dangerouslySetInnerHTML={{
+                            __html: item?.description,
+                          }}
+                        ></p> */}
+                        <p className="price">$ {item?.price}</p>
+                      </div>
+                      <div className="action-bar position-absolute">
+                        <div className="d-flex flex-column gap-15">
+                          <button className="border-0 bg-transparent">
+                            <img src={prodcompare} alt="prodcompare" />
+                          </button>
+                          <button className="border-0 bg-transparent">
+                            <img src={view} alt="view" />
+                          </button>
+                          <button className="border-0 bg-transparent">
+                            <img src={addcart} alt="add car" />
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              }
+            })}
         </div>
       </Container>
       <Container class1="marque-wrapper py-5 home-wrapper-2">
